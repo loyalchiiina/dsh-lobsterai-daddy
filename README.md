@@ -41,7 +41,7 @@ A draggable floating ball for the LobsterDaddy multi-account console, embedded i
 
 | 中文 | English |
 |---|---|
-| 所有路由**仅接受回环地址**，非本机请求返回 403 | Every route is **loopback-only**; non-local requests receive `403` |
+| 所有路由（含状态查询）**仅接受回环地址**，非本机请求返回 403 | Every route (including the status probe) is **loopback-only**; non-local requests receive `403` |
 | 只读取账号**数量**用于徽标，绝不读取/存储/上传凭据 | Reads only the account **count** for the badge — never reads, stores or uploads credentials |
 | 零遥测、零外部网络请求（只与 `127.0.0.1` 通信） | No telemetry, no outbound requests beyond `127.0.0.1` |
 | 不采集、不上传任何数据 | Collects and uploads nothing |
@@ -102,7 +102,7 @@ DSH 界面
 
 ## 安全说明
 
-- 面板仅绑定 `127.0.0.1`；代理路由同样**只接受回环地址**，非本机请求返回 403
+- 面板仅绑定 `127.0.0.1`；代理路由与状态路由同样**只接受回环地址**，非本机请求一律返回 403
 - 不采集、不上传任何数据；账号凭据始终由 LobsterDaddy 自己保管在本机用户目录下的 `LobsterDaddy\accounts`，本插件只读取账号**数量**用于显示徽标，从不接触凭据内容
 - ⚠️ 多账号刷积分可能违反 LobsterAI 服务条款，**请只用于自己的账号**，风险自负
 
