@@ -36,7 +36,8 @@ into a floating ball inside the DSH UI.
 
 ### Security
 
-- All routes are **loopback-only**: non-local requests receive `403`.
+- All routes are **loopback-only**: non-local requests receive `403`. This
+  includes `/status`, which reports the local account count.
 - The plugin reads only the account **count** for its badge; it never reads,
   stores, or transmits account credentials.
 - No telemetry, no outbound network requests beyond `127.0.0.1`.
