@@ -1,6 +1,6 @@
 {
   "name": "dsh-lobsterai-daddy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "LobsterAIDaddy — draggable floating ball + slide-in drawer embedding the LobsterDaddy multi-account console in DSH, with a loopback-only same-origin reverse proxy, live status dot, account badge and a resizable persisted drawer. 把 LobsterDaddy 多账号控制台变成 DSH 界面悬浮球的插件：可拖拽摆位并自动记忆，点开以抽屉内嵌完整网页控制台，界面与网页版一致，支持免退出并行登录、自动签到、积分额度与一键切号。",
   "type": "module",
   "main": "lib/index.js",

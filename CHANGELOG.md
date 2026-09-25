@@ -5,6 +5,40 @@ All notable changes to `dsh-lobsterai-daddy` are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] — 2026-09-25
+
+Responsiveness fix: stop the drawer from falsely reporting the panel as
+unreachable. Verified against a live panel whose cold `/api/status` call took
+7.4s (3ms once cached) — the previous 3s probe timeout reported a perfectly
+healthy panel as offline whenever that cache expired or the panel had just
+restarted. This was the real cause of the recurring
+"面板当前没有响应，点重新连接才行" report.
+
+### Fixed
+
+- **Probe timeout raised from 3s to 12s.** The panel fans out to every account
+  on a cold call, so the old budget could not cover it.
+- **Opening the drawer no longer forces an iframe reload.** Re-assigning `src`
+  with a fresh timestamp on every open re-fetched the entire page and made the
+  drawer look unresponsive; the console refreshes its own data internally.
+- **iframe load watchdog added.** An iframe's `error` event practically never
+  fires, so a slow or failed first paint previously left the fallback panel
+  stuck on screen with no way back. Every `src` assignment now arms a 15s
+  watchdog that silently retries once before falling back.
+- **Probe debounce added.** A single transient failure no longer raises the
+  error panel; two consecutive failures (~16s apart) are required.
+- **Panel response timeout raised from 8s to 20s** in the reverse proxy, so a
+  slow console render is not truncated mid-flight.
+
+### Changed
+
+- **Header button "⧉" replaced by an explicit "浏览器打开" text button** — the
+  icon was too cryptic to find.
+- **The fallback panel now offers "浏览器打开" as well**, alongside reconnect.
+- **Removed the stale "run `node lobster-daddy.js panel` yourself" instruction**
+  from the fallback: panel recovery is handled by a machine-side watchdog now,
+  so telling users to run commands by hand was misleading.
+
 ## [0.1.0] — 2026-09-23
 
 Initial release. LobsterAIDaddy turns the LobsterDaddy multi-account console

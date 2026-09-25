@@ -25,8 +25,8 @@ A draggable floating ball for the LobsterDaddy multi-account console, embedded i
 | 点球展开/收起，抽屉从右侧滑入 | Click the ball to expand/collapse; the drawer slides in from the right |
 | 内嵌完整网页控制台，和浏览器打开 `127.0.0.1:17819` 一模一样 | Embeds the full web console, byte-identical to opening `127.0.0.1:17819` in a browser |
 | 拖动左下角把手自由调整大小，尺寸自动记忆 | Drag the bottom-left grip to resize; the size is persisted |
-| 打开时自动刷新，每次都是最新数据 | Refreshes on every open, so the data is always current |
-| 顶部 ✕ 收起、⟳ 重新加载、⧉ 在浏览器中打开 | Header buttons: ✕ collapse, ⟳ reload, ⧉ open in browser |
+| 首次打开加载后即常驻，避免每次展开都重拉整页 | Loads once and stays mounted, instead of re-fetching the whole page on every expand |
+| 顶部 ✕ 收起、⟳ 重新加载、**浏览器打开** | Header buttons: ✕ collapse, ⟳ reload, **open in browser** |
 
 ### 状态与兜底 · Status & fallback
 
@@ -34,8 +34,29 @@ A draggable floating ball for the LobsterDaddy multi-account console, embedded i
 |---|---|
 | 球右下角圆点：绿=面板在线，灰=未启动 | Dot on the ball: green = panel online, grey = not running |
 | 球左上角徽标显示账号库数量 | Badge on the ball shows the account count |
-| 面板没起来时抽屉给出提示 + 拉起命令 + 一键重连 | When the panel is down the drawer shows a hint, the start command, and one-click reconnect |
+| 面板没起来时抽屉给出提示 + 一键重连 + 浏览器打开 | When the panel is down the drawer shows a hint, one-click reconnect, and open-in-browser |
 | 宿主界面重建 DOM 时自动重新挂载，球不会消失 | Auto re-mounts if the DSH shell rebuilds the DOM, so the ball never disappears |
+
+### 稳定性：为什么它不再动不动报"没有响应" · Why it stops crying wolf
+
+最常见的抱怨是「面板当前没有响应，得点重新连接／刷新才行」。**实测证明多数情况面板本身是健康的，是检测侧误报**，故做了四层处理：
+
+The most common complaint was *"the panel is not responding, I have to hit reconnect"*. Testing showed the panel was usually healthy and **the detection was wrong**, so four guards were added:
+
+| 机制 Mechanism | 说明 Detail |
+|---|---|
+| **探活超时 12s** | 面板 `/api/status` 冷调用实测 7.4s（缓存命中仅 3ms）。原先 3s 超时会在缓存过期或面板刚重启时把健康面板误判为离线 |
+| **Probe timeout 12s** | The panel's cold `/api/status` measured 7.4s (3ms from cache). A 3s timeout reported a healthy panel as offline whenever the cache expired or the panel had just restarted |
+| **打开不强制重载** | 点开抽屉只在首次加载 iframe，避免每次展开都重拉整页而"看起来没响应" |
+| **No forced reload on open** | The drawer loads the iframe once; re-fetching the whole page on every expand made it *look* unresponsive |
+| **iframe 加载看门狗** | iframe 的 `error` 事件几乎不触发，故每次赋 `src` 都启用 15s 看门狗：超时静默重试一次，仍失败才降级到提示面板 |
+| **iframe load watchdog** | An iframe's `error` event practically never fires, so every `src` assignment arms a 15s watchdog: one silent retry, then fall back |
+| **探活防抖** | 连续 2 次失败（约 16s）才显示错误面板，单次网络抖动不会翻脸 |
+| **Probe debounce** | Two consecutive failures (~16s) are required before the error panel shows, so a single blip does not trigger it |
+
+面板进程自身的存活由机器侧看护脚本负责（定时巡检、掉线静默拉起），与插件相互独立 —— 插件只负责**如实反映状态**，不负责"让面板活着"。
+
+Keeping the panel process alive is the job of a machine-side watchdog (periodic checks, silent restart), independent of this plugin — the plugin only **reports status truthfully** rather than keeping the panel running.
 
 ### 安全与隐私 · Security & privacy
 
@@ -60,13 +81,13 @@ dsh plugin --profile desktop add github:loyalchiiina/dsh-lobsterai-daddy
 
 ### 前置：LobsterDaddy 面板
 
-悬浮球只是入口，真正的能力由 LobsterDaddy 提供。面板没起来时先跑：
+悬浮球只是入口，真正的能力由 LobsterDaddy 提供。需要先让面板在 `127.0.0.1:17819` 跑起来：
 
 ```bash
 node lobster-daddy.js panel
 ```
 
-（默认监听 `127.0.0.1:17819`，仅本机可访问。）
+建议把它交给机器侧看护脚本常驻（掉线自动拉起），这样悬浮球就无需人工干预。面板默认仅绑定 `127.0.0.1`，只有本机可访问。
 
 ## 原理
 
