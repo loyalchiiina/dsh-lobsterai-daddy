@@ -1,0 +1,24 @@
+# Dependency / build output
+node_modules/
+*.tgz
+dist/
+build/
+
+# Local editor & OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# Local development backup / good-version snapshots
+*.bak
+*.bak-*
+*.GOOD-*
+*-dev-log.*
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

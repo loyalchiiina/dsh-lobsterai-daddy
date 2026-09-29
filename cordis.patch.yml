@@ -1,0 +1,16 @@
+# dsh-lobsterai-daddy — LobsterAIDaddy floating ball for the LobsterDaddy console.
+#
+# Dual-half plugin:
+#   * the host half (lib/index.js) registers a loopback-only health/status route so
+#     the bundle has a real cordis activate (inject = ['webServer']);
+#   * the client half (lib/client.js) draws the draggable floating ball and the
+#     slide-in drawer that embeds the LobsterDaddy web console
+#     (http://127.0.0.1:17819) in an iframe, so the panel looks exactly like the
+#     web version.
+#
+# The `id` / `name` below MUST stay identical to the `name` field in package.json
+# and to the `id` passed to __ModuleLoader__.load in lib/client.js — a short name
+# makes the client fail with "loaded without registering via __ModuleLoader__.load".
+- insert:
+    - id: dsh-lobsterai-daddy
+      name: dsh-lobsterai-daddy
