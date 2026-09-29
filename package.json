@@ -1,53 +1,62 @@
 {
-  "name": "dsh-lobsterai-daddy",
-  "version": "0.4.1",
-  "description": "LobsterAIDaddy — a draggable floating ball whose drawer renders the LobsterDaddy multi-account console as native DOM inside DSH: action buttons first, then the account LobsterAI is currently signed in as, then the account list with balances, per-account check-in state and last check-in time. Includes a loopback-only same-origin reverse proxy, live status dot, account badge, a resizable persisted drawer, and a follow toggle that keeps the panel with the ball. 把 LobsterDaddy 多账号控制台变成 DSH 界面悬浮球的插件：可拖拽摆位并自动记忆，面板可跟随悬浮球移动；点开即以原生渲染的控制台操作（账号与积分额度、已签到状态与最近签到时间、当前登录账号自动显示、一键签到、免退出登录新账号、切号、同步网关）。",
-  "type": "module",
-  "main": "lib/index.js",
-  "sideEffects": false,
-  "engines": {
-    "node": ">=18"
-  },
-  "exports": {
-    ".": "./lib/index.js",
-    "./client": "./lib/client.js",
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "lib/**/*.js",
-    "cordis.patch.yml",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE",
-    "docs/*.png"
-  ],
-  "license": "MIT",
-  "keywords": [
-    "dsh-plugin",
-    "deepseek-harness",
-    "lobsterai",
-    "lobster-daddy",
-    "悬浮球",
-    "float-ball",
-    "multi-account"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/loyalchiiina/dsh-lobsterai-daddy.git"
-  },
-  "homepage": "https://github.com/loyalchiiina/dsh-lobsterai-daddy#readme",
-  "bugs": {
-    "url": "https://github.com/loyalchiiina/dsh-lobsterai-daddy/issues"
-  },
-  "dsh": {
-    "bundle": {
-      "patch": "./cordis.patch.yml"
-    },
-    "client": {
-      "inject": [
-        "@deepseek-ai/dsh-client-runtime"
-      ],
-      "platform": "web"
-    }
-  }
+    "name":  "dsh-lobsterai-daddy",
+    "version":  "0.4.2",
+    "description":  "LobsterAIDaddy — a draggable floating ball whose drawer renders the LobsterDaddy multi-account console as native DOM inside DSH: action buttons first, then the account LobsterAI is currently signed in as, then the account list with balances, per-account check-in state and last check-in time. Includes a loopback-only same-origin reverse proxy, live status dot, account badge, a resizable persisted drawer, and a follow toggle that keeps the panel with the ball. 把 LobsterDaddy 多账号控制台变成 DSH 界面悬浮球的插件：可拖拽摆位并自动记忆，面板可跟随悬浮球移动；点开即以原生渲染的控制台操作（账号与积分额度、已签到状态与最近签到时间、当前登录账号自动显示、一键签到、免退出登录新账号、切号、同步网关）。",
+    "type":  "module",
+    "main":  "lib/index.js",
+    "sideEffects":  false,
+    "engines":  {
+                    "node":  "\u003e=18",
+                    "dsh":  "\u003e=0.1.7-rc.1"
+                },
+    "exports":  {
+                    ".":  "./lib/index.js",
+                    "./client":  "./lib/client.js",
+                    "./package.json":  "./package.json"
+                },
+    "files":  [
+                  "lib/**/*.js",
+                  "cordis.patch.yml",
+                  "README.md",
+                  "CHANGELOG.md",
+                  "LICENSE",
+                  "docs/*.png"
+              ],
+    "license":  "MIT",
+    "keywords":  [
+                     "dsh-plugin",
+                     "deepseek-harness",
+                     "lobsterai",
+                     "lobster-daddy",
+                     "悬浮球",
+                     "float-ball",
+                     "multi-account"
+                 ],
+    "repository":  {
+                       "type":  "git",
+                       "url":  "git+https://github.com/loyalchiiina/dsh-lobsterai-daddy.git"
+                   },
+    "homepage":  "https://github.com/loyalchiiina/dsh-lobsterai-daddy#readme",
+    "bugs":  {
+                 "url":  "https://github.com/loyalchiiina/dsh-lobsterai-daddy/issues"
+             },
+    "dsh":  {
+                "bundle":  {
+                               "patch":  "./cordis.patch.yml"
+                           },
+                "client":  {
+                               "inject":  [
+                                              "@deepseek-ai/dsh-client-runtime"
+                                          ],
+                               "platform":  "web"
+                           }
+            },
+    "peerDependencies":  {
+                             "@deepseek-ai/cordis":  "^4.0.2",
+                             "@deepseek-ai/dsh":  "\u003e=0.1.7-rc.1"
+                         },
+    "devDependencies":  {
+                            "@deepseek-ai/cordis":  "^4.0.2",
+                            "@deepseek-ai/dsh":  "\u003e=0.1.7-rc.1"
+                        }
 }
