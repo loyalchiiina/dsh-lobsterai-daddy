@@ -5,6 +5,101 @@ All notable changes to `dsh-lobsterai-daddy` are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.4.0] — 2026-09-28
+
+UI pass driven by direct user review: layout order, check-in state, and the
+currently signed-in account.
+
+### Added
+
+- **The currently signed-in account is shown in the drawer** and updates on its
+  own. Read live from LobsterAI's own store (`%APPDATA%\LobsterAI\lobsterai.sqlite`,
+  `kv` table: `auth_tokens` / `auth_user`) by the Host via a new
+  `GET /dsh-lobsterai-daddy/current` route, because the renderer cannot open
+  SQLite. Switching accounts through the console rewrites that store, so the
+  next refresh reflects it — no "capture account" step required. The probe is
+  best-effort: it reports `available:false` instead of throwing, and it is
+  fetched separately so a failure can never blank the account list.
+- **Per-account check-in state and time**: `已签到` / `今日已签到` /
+  `今日未签到`, each with the last check-in timestamp (`MM-DD HH:MM`).
+
+### Changed
+
+- **Drawer layout reordered** to: status line → action buttons → current
+  account → account list → run info. The account list used to lead, which
+  pushed the common actions below the fold.
+- `node:sqlite` is resolved through `createRequire(import.meta.url)` and
+  degrades gracefully on Node builds without it.
+
+## [0.3.0] — 2026-09-28
+
+**The console is now rendered as native DOM. The iframe is gone entirely.**
+
+### Why
+
+Every iframe form failed, and the failure is structural rather than a bug in
+this plugin — the DSH desktop shell blocks it in three independent ways:
+
+1. `dsh-app://app` grants the `x-dsh-desktop-renderer` bypass **only to the
+   top-level frame** (`request.frame === owner.mainFrame` in the installed
+   `lib/web-document.js`). A sub-frame never receives it, so `forwardWebRequest`
+   answers **403** — and the frame still fires `load`, which is why the drawer
+   showed an empty panel with no error.
+2. An absolute `http://127.0.0.1:<port>` URL is refused by the renderer's CSP
+   (measured: `relative-fetch status=200` versus `loopback-fetch FAILED`).
+3. `main.js` disables `webview` outright
+   (`contents.on("will-attach-webview", e => e.preventDefault())`).
+
+Because the console refreshes itself every 15s, the drawer went black on a
+predictable cycle rather than intermittently.
+
+### Added
+
+- Native console rendering: status line, account cards with balance/plan/usage,
+  eight action buttons, run info, and a `浏览器打开` fallback that launches the
+  real system browser from the Host process.
+- Drawer polling runs only while the drawer is open.
+
+### Fixed
+
+- **All `fetch` URLs stay root-relative.** An intermediate build upgraded them
+  to the Host's absolute origin after probing it, which the CSP rejected and
+  which left the drawer completely empty. A regression assertion in the client
+  probe now forbids absolute URLs.
+- `/panel/api/*` and the Host's own `/status` are distinct endpoints with
+  different payloads; conflating them rendered "no accounts".
+
+### Removed
+
+- The iframe element, its load watchdog, the `frameHasConsole` content check
+  and the fallback overlay (~80 lines).
+
+## [0.2.0] — 2026-09-28
+
+### Added
+
+- **The panel follows the floating ball.** Dragging the ball carries an open
+  drawer by the same offset; the header can also drag the panel on its own; a
+  `跟随 / 固定` toggle persists the choice, and the drawer's position is
+  persisted separately from the ball's.
+- `GET /dsh-lobsterai-daddy/open` — launches the console in the system browser
+  from the Host process, since `window.open` is silently blocked in the
+  `dsh-app://` renderer. Loopback-only, like every other route.
+
+### Fixed
+
+- **Reverse-proxy correctness**, the real cause of "can't refresh / displays
+  wrong": `content-encoding` and `content-length` could disagree after the HTML
+  shim was injected (compressed bytes re-labelled as identity → garbage); only
+  `content-type`/`accept` were forwarded; any path outside `/panel/*` returned
+  the plugin's own 404 JSON, so the console's absolute `fetch('/api/...')` calls
+  came back as `not found` and surfaced as
+  `刷新失败：Unexpected token 'o', "not found" is not valid JSON`. Requests now
+  ask for `identity` encoding, forward the needed headers, and pass unknown
+  paths through to the panel.
+- The ball→drawer offset is sampled once at `pointerdown`; recomputing it per
+  `pointermove` pinned the panel in place instead of moving it.
+
 ## [0.1.1] — 2026-09-25
 
 Responsiveness fix: stop the drawer from falsely reporting the panel as
