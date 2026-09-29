@@ -5,6 +5,13 @@ All notable changes to `dsh-lobsterai-daddy` are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.4.1] — 2026-09-29
+
+Same content as 0.4.0. The 0.4.0 upload was accepted into npm's staging area but
+never became fetchable (a re-publish answered
+`409 Conflict - Cannot publish over previously staged version`), so this release
+carries the identical tree under a fresh version number.
+
 ## [0.4.0] — 2026-09-28
 
 UI pass driven by direct user review: layout order, check-in state, and the
