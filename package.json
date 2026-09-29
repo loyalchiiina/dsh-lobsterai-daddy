@@ -1,7 +1,7 @@
 {
   "name": "dsh-lobsterai-daddy",
-  "version": "0.1.1",
-  "description": "LobsterAIDaddy — draggable floating ball + slide-in drawer embedding the LobsterDaddy multi-account console in DSH, with a loopback-only same-origin reverse proxy, live status dot, account badge and a resizable persisted drawer. 把 LobsterDaddy 多账号控制台变成 DSH 界面悬浮球的插件：可拖拽摆位并自动记忆，点开以抽屉内嵌完整网页控制台，界面与网页版一致，支持免退出并行登录、自动签到、积分额度与一键切号。",
+  "version": "0.4.0",
+  "description": "LobsterAIDaddy — a draggable floating ball whose drawer renders the LobsterDaddy multi-account console as native DOM inside DSH: action buttons first, then the account LobsterAI is currently signed in as, then the account list with balances, per-account check-in state and last check-in time. Includes a loopback-only same-origin reverse proxy, live status dot, account badge, a resizable persisted drawer, and a follow toggle that keeps the panel with the ball. 把 LobsterDaddy 多账号控制台变成 DSH 界面悬浮球的插件：可拖拽摆位并自动记忆，面板可跟随悬浮球移动；点开即以原生渲染的控制台操作（账号与积分额度、已签到状态与最近签到时间、当前登录账号自动显示、一键签到、免退出登录新账号、切号、同步网关）。",
   "type": "module",
   "main": "lib/index.js",
   "sideEffects": false,
@@ -18,7 +18,8 @@
     "cordis.patch.yml",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "docs/*.png"
   ],
   "license": "MIT",
   "keywords": [
