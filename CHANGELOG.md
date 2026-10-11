@@ -5,6 +5,13 @@ All notable changes to `dsh-lobsterai-daddy` are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.4.1] — 2026-09-29
+
+Same content as 0.4.0. The 0.4.0 upload was accepted into npm's staging area but
+never became fetchable (a re-publish answered
+`409 Conflict - Cannot publish over previously staged version`), so this release
+carries the identical tree under a fresh version number.
+
 ## [0.4.0] — 2026-09-28
 
 UI pass driven by direct user review: layout order, check-in state, and the
@@ -179,3 +186,15 @@ into a floating ball inside the DSH UI.
 - The HTML shim is injected immediately before `</head>` so it can never land
   ahead of `<meta charset="utf-8">` (which would make the page decode as
   latin-1 and turn every Chinese label into mojibake).
+
+## 0.7.4 — 2026-10-11
+
+- 新增 `docs/drawer-overview.png`：悬浮球抽屉完整界面作为主宣传图，README 效果图区置顶
+- README：修正已过时的功能表（「复位登录流程 / 守护进程开关」已随控制台退场删除），
+  补充「Star 直达」「完全自包含」条目
+- `npm pack` 核对：3 张效果图全部进包（`files` 白名单含 `docs/*.png`）
+## 0.7.5 — 2026-10-11
+
+- 删除两张过时截图（`docs/多账号登录控制台.png`、`docs/龙虾签到账号.png`，09-29 旧界面，
+  之后界面历经 5 个版本变更）；README 效果图区只保留当前界面的 `docs/drawer-overview.png`
+- 旧图已入回收站（可恢复），未永久删除
